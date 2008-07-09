@@ -290,22 +290,7 @@ class MemCache
       value = Marshal.dump value unless raw
       command = "set #{cache_key} 0 #{expiry} #{value.to_s.size}\r\n#{value}\r\n"
 
-<<<<<<< HEAD:lib/memcache.rb
-      with_socket_management(server) do |socket|
-        socket.write command
-        result = socket.gets
-  			if result.nil?
-          server.close
-          raise MemCacheError, "lost connection to #{server.host}:#{server.port}"
-        end
-
-  			if result =~ /^SERVER_ERROR (.*)/
-          server.close
-          raise MemCacheError, $1.strip
-  			end
-      end
-=======
-    ActiveRecord::Base.logger.info "Setting key/value #{key}\n#{value}" if value.to_s.size > 800000
+      ActiveRecord::Base.logger.info "Setting key/value #{key}\n#{value}" if value.to_s.size > 800000
     
     begin
       @mutex.lock if @multithread
@@ -317,7 +302,6 @@ class MemCache
       raise MemCacheError, err.message
     ensure
       @mutex.unlock if @multithread
->>>>>>> 1.5.0:lib/memcache.rb
     end
   end
 
@@ -335,12 +319,6 @@ class MemCache
       value = Marshal.dump value unless raw
       command = "add #{cache_key} 0 #{expiry} #{value.size}\r\n#{value}\r\n"
 
-<<<<<<< HEAD:lib/memcache.rb
-      with_socket_management(server) do |socket|
-        socket.write command
-        socket.gets
-      end
-=======
     ActiveRecord::Base.logger.info "Adding key/value #{key}\n#{value}" if value.to_s.size > 800000
 
     begin
@@ -352,7 +330,6 @@ class MemCache
       raise MemCacheError, err.message
     ensure
       @mutex.unlock if @multithread
->>>>>>> 1.5.0:lib/memcache.rb
     end
   end
   
