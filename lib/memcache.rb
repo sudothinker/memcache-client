@@ -300,6 +300,8 @@ class MemCache
     value = Marshal.dump value unless raw
     command = "set #{cache_key} 0 #{expiry} #{value.size}\r\n#{value}\r\n"
 
+    ActiveRecord::Base.logger.info "Setting key/value #{key}\n#{value}" if value.to_s.size > 800000
+    
     begin
       @mutex.lock if @multithread
       socket.write command
@@ -328,6 +330,8 @@ class MemCache
 
     value = Marshal.dump value unless raw
     command = "add #{cache_key} 0 #{expiry} #{value.size}\r\n#{value}\r\n"
+
+    ActiveRecord::Base.logger.info "Adding key/value #{key}\n#{value}" if value.to_s.size > 800000
 
     begin
       @mutex.lock if @multithread
